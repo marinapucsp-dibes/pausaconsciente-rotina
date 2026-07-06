@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Pausa Consciente</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,500&family=Quicksand:wght@400;500;600;700&display=swap');
+
+:root{
+  --rosa-claro:#F7D6E0;
+  --rosa-medio:#EFA6C4;
+  --rosa-escuro:#C25A85;
+  --lilas-claro:#E8DFF5;
+  --lilas-medio:#B79FDA;
+  --creme:#FBF5F0;
+  --texto:#4A3B45;
+  --texto-suave:#8A7681;
+  --branco:#FFFFFF;
+  --sombra: 0 8px 24px rgba(194,90,133,0.14);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  background: linear-gradient(160deg, var(--creme) 0%, var(--rosa-claro) 100%);
+  min-height:100vh;
+  font-family:'Quicksand', sans-serif;
+  color:var(--texto);
+  overflow-x:hidden;
+}
+.app{ max-width:480px; margin:0 auto; min-height:100vh; position:relative; padding-bottom:40px; }
+
+/* ---------- HEADER ---------- */
+header{
+  padding:36px 24px 20px;
+  text-align:center;
+}
+header .eyebrow{
+  font-size:12px; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--rosa-escuro); font-weight:700; opacity:0.75;
+}
+header h1{
+  font-family:'Fraunces', serif; font-weight:500; font-style:italic;
+  font-size:30px; margin:6px 0 8px; color:var(--texto);
+}
+header p{ font-size:14px; color:var(--texto-suave); margin:0; line-height:1.5; }
+
+/* ---------- HOME: cards ---------- */
+.cards{ padding: 8px 20px 20px; display:flex; flex-direction:column; gap:14px; }
+.card{
+  background:var(--branco); border-radius:22px; padding:18px 18px;
+  box-shadow: var(--sombra); display:flex; align-items:center; gap:16px;
+  cursor:pointer; border:1px solid rgba(194,90,133,0.06);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.card:active{ transform: scale(0.97); }
+.card .icon{
+  width:52px; height:52px; border-radius:16px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-size:24px;
+}
+.card .info{ flex:1; }
+.card .info .nome{ font-family:'Fraunces', serif; font-size:17px; font-weight:600; margin-bottom:2px;}
+.card .info .desc{ font-size:12.5px; color:var(--texto-suave); line-height:1.4;}
+.card .dur{ font-size:11px; font-weight:700; color:var(--rosa-escuro); background:var(--rosa-claro); padding:4px 10px; border-radius:20px; white-space:nowrap;}
+
+.card.c1 .icon{ background:var(--rosa-claro); }
+.card.c2 .icon{ background:var(--lilas-claro); }
+.card.c3 .icon{ background:#DDEFE0; }
+.card.c4 .icon{ background:#DCEEF7; }
+
+.hint{
+  text-align:center; font-size:12.5px; color:var(--texto-suave);
+  padding: 4px 30px 10px; line-height:1.6; font-style:italic;
+}
+
+/* ---------- SESSION SCREEN ---------- */
+.session{
+  position:fixed; inset:0; background:var(--creme); z-index:10;
+  display:flex; flex-direction:column; align-items:center;
+  transform:translateY(100%); transition: transform .35s cubic-bezier(.4,0,.2,1);
+}
+.session.active{ transform:translateY(0); }
+
+.session-top{
+  width:100%; max-width:480px; padding:20px 20px 0; display:flex; align-items:center; gap:14px;
+}
+.back-btn{
+  width:38px;height:38px;border-radius:50%;background:var(--branco);
+  display:flex;align-items:center;justify-content:center; font-size:18px;
+  box-shadow:var(--sombra); border:none; color:var(--rosa-escuro); cursor:pointer;
+}
+.session-title{ font-family:'Fraunces', serif; font-size:18px; font-weight:600; }
+
+.session-body{
+  flex:1; width:100%; max-width:480px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; padding:20px 30px; text-align:center;
+}
+
+.breath-circle-wrap{ position:relative; width:220px; height:220px; margin-bottom:34px; display:flex; align-items:center; justify-content:center;}
+.breath-ring{
+  position:absolute; inset:0; border-radius:50%;
+  background: radial-gradient(circle at 35% 30%, var(--rosa-medio), var(--lilas-medio));
+  opacity:0.35;
+  animation: none;
+}
+.breath-ring.breathing{ animation: breathe 8s ease-in-out infinite; }
+@keyframes breathe{
+  0%{ transform:scale(0.72); opacity:0.30; }
+  45%{ transform:scale(1); opacity:0.5; }
+  50%{ transform:scale(1); opacity:0.5; }
+  95%{ transform:scale(0.72); opacity:0.30; }
+  100%{ transform:scale(0.72); opacity:0.30; }
+}
+.breath-core{
+  position:relative; width:150px;height:150px;border-radius:50%;
+  background:var(--branco); box-shadow:0 4px 30px rgba(194,90,133,0.25);
+  display:flex;align-items:center;justify-content:center; flex-direction:column;
+}
+.breath-word{ font-family:'Fraunces', serif; font-style:italic; font-size:19px; color:var(--rosa-escuro); font-weight:500;}
+.breath-timer{ font-size:13px; color:var(--texto-suave); margin-top:4px; font-weight:600;}
+
+.step-label{
+  font-size:11px; letter-spacing:2px; text-transform:uppercase; font-weight:700;
+  color:var(--rosa-escuro); opacity:0.8; margin-bottom:10px;
+}
+.step-text{
+  font-size:17px; line-height:1.65; color:var(--texto); font-weight:500; min-height:80px;
+}
+
+.progress-dots{ display:flex; gap:7px; margin-top:26px; }
+.dot{ width:8px;height:8px;border-radius:50%; background:var(--rosa-claro); transition: background .3s;}
+.dot.done{ background:var(--rosa-escuro); }
+
+.session-bottom{ width:100%; max-width:480px; padding:14px 30px 36px; }
+.btn-primary{
+  width:100%; padding:16px; border:none; border-radius:18px;
+  background: linear-gradient(135deg, var(--rosa-escuro), var(--lilas-medio));
+  color:#fff; font-family:'Quicksand', sans-serif; font-weight:700; font-size:15.5px;
+  box-shadow: var(--sombra); cursor:pointer;
+}
+.btn-primary:active{ transform: scale(0.98); }
+.btn-ghost{
+  width:100%; padding:12px; margin-top:10px; border:none; background:transparent;
+  color:var(--texto-suave); font-size:13px; font-weight:600; cursor:pointer;
+}
+
+/* ---------- FIM DA SESSÃO ---------- */
+.done-screen{ display:none; flex-direction:column; align-items:center; text-align:center; padding:20px 30px;}
+.done-screen.show{ display:flex; }
+.done-emoji{ font-size:56px; margin-bottom:16px; }
+.done-title{ font-family:'Fraunces', serif; font-size:22px; font-style:italic; margin-bottom:10px; }
+.done-text{ font-size:14.5px; color:var(--texto-suave); line-height:1.6; margin-bottom:8px;}
+
+.counter-badge{
+  margin-top: 22px; font-size:12px; color:var(--texto-suave);
+  background:var(--branco); padding:8px 16px; border-radius:20px; box-shadow:var(--sombra);
+}
+
+/* ---------- TABS ---------- */
+.tabbar{ display:flex; gap:10px; padding:0 20px 16px; }
+.tab-btn{
+  flex:1; padding:12px; border:none; border-radius:16px; background:var(--branco);
+  color:var(--texto-suave); font-family:'Quicksand', sans-serif; font-weight:700; font-size:13.5px;
+  box-shadow:var(--sombra); cursor:pointer; transition:.2s;
+}
+.tab-btn.active{ background:linear-gradient(135deg, var(--rosa-escuro), var(--lilas-medio)); color:#fff; }
+
+/* ---------- ROTINA ---------- */
+.rotina-header{ padding:4px 20px 12px; }
+.rotina-date{ font-family:'Fraunces', serif; font-style:italic; font-size:19px; margin-bottom:12px; text-transform:capitalize;}
+.rotina-progress-wrap{ display:flex; align-items:center; gap:10px; }
+.rotina-progress-bar{ flex:1; height:10px; border-radius:6px; background:var(--rosa-claro); overflow:hidden; }
+.rotina-progress-fill{ height:100%; background:linear-gradient(90deg, var(--rosa-escuro), var(--lilas-medio)); border-radius:6px; transition:width .3s; width:0%;}
+.rotina-progress-label{ font-size:12px; font-weight:700; color:var(--rosa-escuro); white-space:nowrap; }
+
+.checklist{ padding:6px 20px; display:flex; flex-direction:column; gap:10px; }
+.check-item{
+  display:flex; align-items:center; gap:14px; background:var(--branco); border-radius:18px;
+  padding:14px 16px; box-shadow:var(--sombra); cursor:pointer; transition:.15s;
+}
+.check-item:active{ transform:scale(0.98); }
+.check-item .ic{ font-size:20px; width:26px; text-align:center; flex-shrink:0; }
+.check-item .lbl{ font-size:14.5px; font-weight:600; flex:1; transition:.2s; }
+.check-item .chk{
+  width:26px; height:26px; border-radius:50%; border:2.5px solid var(--rosa-medio);
+  flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:14px; color:#fff; transition:.2s;
+}
+.check-item.done{ background:#FDF4F7; }
+.check-item.done .chk{ background:var(--rosa-escuro); border-color:var(--rosa-escuro); }
+.check-item.done .lbl{ color:var(--texto-suave); text-decoration:line-through; }
+
+.btn-secondary{
+  display:block; width:calc(100% - 40px); margin:8px 20px 6px; padding:14px; border:none;
+  border-radius:16px; background:var(--lilas-claro); color:var(--rosa-escuro);
+  font-family:'Quicksand', sans-serif; font-weight:700; font-size:13.5px; cursor:pointer;
+}
+
+.summary-card{
+  margin:12px 20px 30px; background:var(--branco); border-radius:22px; padding:22px;
+  box-shadow:var(--sombra);
+}
+.summary-title{ font-family:'Fraunces', serif; font-style:italic; font-size:18px; margin-bottom:2px;}
+.summary-range{ font-size:12px; color:var(--texto-suave); margin-bottom:18px; }
+.summary-big-row{ display:flex; align-items:baseline; gap:8px; margin-bottom:22px; }
+.summary-big{ font-size:38px; font-weight:700; color:var(--rosa-escuro); font-family:'Fraunces', serif; }
+.summary-big-label{ font-size:12px; color:var(--texto-suave); }
+
+.days-row{ display:flex; justify-content:space-between; margin-bottom:26px; }
+.day-col{ display:flex; flex-direction:column; align-items:center; gap:7px; width:34px; }
+.day-bar-wrap{ width:14px; height:70px; background:var(--rosa-claro); border-radius:7px; overflow:hidden; display:flex; flex-direction:column-reverse;}
+.day-bar-fill{ width:100%; background:linear-gradient(180deg, var(--lilas-medio), var(--rosa-escuro)); }
+.day-label{ font-size:9.5px; color:var(--texto-suave); font-weight:700; }
+.day-label.today{ color:var(--rosa-escuro); }
+.day-pct{ font-size:9px; color:var(--texto-suave); }
+
+.focus-title{ font-size:11px; letter-spacing:1.5px; text-transform:uppercase; font-weight:700; color:var(--rosa-escuro); margin-bottom:10px; }
+.focus-item{ display:flex; justify-content:space-between; align-items:center; font-size:13.5px; padding:9px 0; border-bottom:1px solid var(--rosa-claro); }
+.focus-item:last-child{ border-bottom:none; }
+.focus-pct{ font-weight:700; color:var(--rosa-escuro); font-size:13px; }
+.focus-empty{ font-size:13px; color:var(--texto-suave); font-style:italic; padding:6px 0; }
+
+/* ---------- SYNC GITHUB ---------- */
+.sync-bar{ margin:0 20px 16px; }
+.sync-form{
+  background:#FFF3D6; border-radius:18px; padding:16px 18px; box-shadow:var(--sombra);
+}
+.sync-title{ font-size:13px; font-weight:700; color:#8A6D1D; margin-bottom:10px; }
+.sync-form input{
+  width:100%; padding:11px 14px; margin-bottom:8px; border-radius:12px; border:1px solid #EAD9A0;
+  font-family:'Quicksand', sans-serif; font-size:13px; background:#FFFDF7; color:var(--texto);
+}
+.sync-form input:focus{ outline:2px solid var(--rosa-medio); }
+.sync-connect-btn{
+  width:100%; padding:12px; border:none; border-radius:12px; background:#8A6D1D; color:#fff;
+  font-family:'Quicksand', sans-serif; font-weight:700; font-size:13.5px; cursor:pointer; margin-top:4px;
+}
+.sync-hint{ font-size:11px; color:#9C8137; margin-top:10px; line-height:1.5; }
+.sync-collapsed{
+  display:flex; align-items:center; justify-content:space-between; background:var(--branco);
+  border-radius:14px; padding:10px 16px; box-shadow:var(--sombra); font-size:12.5px; font-weight:600;
+}
+.sync-collapsed .txt{ color:var(--texto-suave); }
+.sync-collapsed .txt.ok{ color:#3F7A52; }
+.sync-collapsed .txt.err{ color:var(--rosa-escuro); }
+.sync-collapsed button{
+  border:none; background:transparent; font-size:16px; cursor:pointer; color:var(--texto-suave);
+}
+.sync-mini-btn{
+  border:none; background:var(--branco); box-shadow:var(--sombra); border-radius:50%;
+  width:34px; height:34px; font-size:15px; cursor:pointer; flex-shrink:0;
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <header>
+    <div class="eyebrow">Antes de agir</div>
+    <h1>Pausa consciente</h1>
+    <p>Escolha uma técnica pra usar agora, no momento do impulso —<br>não depois dele.</p>
+  </header>
+
+  <div class="sync-bar" id="sync-bar">
+    <div class="sync-form" id="sync-form">
+      <div class="sync-title">🔄 Sincronizar entre celular e computador</div>
+      <input id="gh-owner" placeholder="Usuário do GitHub" autocomplete="off">
+      <input id="gh-repo" placeholder="Nome do repositório" autocomplete="off">
+      <input id="gh-token" placeholder="Token de acesso" type="password" autocomplete="off">
+      <button class="sync-connect-btn" id="gh-connect-btn">Conectar</button>
+      <div class="sync-hint">Gere o token em GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic), marcando a permissão "repo". Cole o mesmo usuário, repositório e token nos dois aparelhos.</div>
+    </div>
+    <div class="sync-collapsed" id="sync-collapsed" style="display:none;">
+      <span class="txt" id="sync-status-text">🔗 Sincronizado com GitHub</span>
+      <button id="sync-config-btn" title="Configurar">⚙️</button>
+    </div>
+  </div>
+
+  <div class="tabbar">
+    <button class="tab-btn active" id="tab-btn-med">🧘 Meditações</button>
+    <button class="tab-btn" id="tab-btn-rotina">✅ Minha Rotina</button>
+  </div>
+
+  <div id="view-med">
+  <div class="cards" id="home-cards">
+    <div class="card c1" data-tec="stop">
+      <div class="icon">🛑</div>
+      <div class="info">
+        <div class="nome">STOP</div>
+        <div class="desc">Pare, respire, observe, decida.</div>
+      </div>
+      <div class="dur">~1 min</div>
+    </div>
+
+    <div class="card c2" data-tec="urge">
+      <div class="icon">🌊</div>
+      <div class="info">
+        <div class="nome">Urge Surfing</div>
+        <div class="desc">Deixe a vontade subir e descer como uma onda.</div>
+      </div>
+      <div class="dur">4 min</div>
+    </div>
+
+    <div class="card c3" data-tec="dez">
+      <div class="icon">⏳</div>
+      <div class="info">
+        <div class="nome">Regra dos 10 min</div>
+        <div class="desc">Respire e adie a decisão por 10 minutos.</div>
+      </div>
+      <div class="dur">10 min</div>
+    </div>
+
+    <div class="card c4" data-tec="rain">
+      <div class="icon">🌧️</div>
+      <div class="info">
+        <div class="nome">RAIN</div>
+        <div class="desc">Reconhecer, Aceitar, Investigar, Nutrir.</div>
+      </div>
+      <div class="dur">~4 min</div>
+    </div>
+  </div>
+
+  <div class="hint">💛 Use sempre que sentir vontade de gastar ou comer por impulso, antes de agir.</div>
+  <div style="text-align:center;"><span class="counter-badge" id="counter-badge">Você já fez 0 pausas</span></div>
+  </div>
+  <!-- /view-med -->
+
+  <div id="view-rotina" style="display:none;">
+    <div class="rotina-header">
+      <div class="rotina-date" id="rotina-date"></div>
+      <div class="rotina-progress-wrap">
+        <div class="rotina-progress-bar"><div class="rotina-progress-fill" id="rotina-progress-fill"></div></div>
+        <div class="rotina-progress-label" id="rotina-progress-label">0/0</div>
+        <button class="sync-mini-btn" id="sync-refresh-btn" title="Buscar dados do outro aparelho">🔄</button>
+      </div>
+    </div>
+
+    <div class="checklist" id="checklist"></div>
+
+    <button class="btn-secondary" id="toggle-summary-btn">📊 Ver resumo da semana</button>
+    <div class="summary-card" id="summary-card" style="display:none;"></div>
+  </div>
+  <!-- /view-rotina -->
+
+</div>
+
+<!-- SESSION OVERLAY -->
+<div class="session" id="session">
+  <div class="session-top">
+    <button class="back-btn" id="back-btn">←</button>
+    <div class="session-title" id="session-title"></div>
+  </div>
+
+  <div class="session-body" id="session-body">
+    <div id="normal-view">
+      <div class="breath-circle-wrap">
+        <div class="breath-ring" id="breath-ring"></div>
+        <div class="breath-core">
+          <div class="breath-word" id="breath-word">Pronta?</div>
+          <div class="breath-timer" id="breath-timer"></div>
+        </div>
+      </div>
+      <div class="step-label" id="step-label">Passo 1</div>
+      <div class="step-text" id="step-text"></div>
+      <div class="progress-dots" id="progress-dots"></div>
+    </div>
+
+    <div class="done-screen" id="done-screen">
+      <div class="done-emoji">🌷</div>
+      <div class="done-title">Pausa concluída</div>
+      <div class="done-text" id="done-text"></div>
+    </div>
+  </div>
+
+  <div class="session-bottom">
+    <button class="btn-primary" id="main-btn">Começar</button>
+    <button class="btn-ghost" id="skip-btn">pular pro próximo passo</button>
+  </div>
+</div>
+
+<script>
+const TECS = {
+  stop: {
+    nome: "STOP",
+    doneMsg: "Você parou, respirou e observou antes de agir. Isso já é a parte mais difícil.",
+    steps: [
+      { label:"Passo 1 de 4", word:"Pare", text:"Pare o que você está fazendo agora — largue o celular ou o carrinho de compras por um instante.", dur:8, breathing:false },
+      { label:"Passo 2 de 4", word:"Respire", text:"Faça uma respiração funda: inspire pelo nariz contando até 4, segure 2, solte devagar pela boca.", dur:12, breathing:true },
+      { label:"Passo 3 de 4", word:"Observe", text:"O que você está sentindo agora? Onde essa sensação aparece no corpo? Só perceba, sem julgar.", dur:15, breathing:false },
+      { label:"Passo 4 de 4", word:"Prossiga", text:"Agora, com um pouco mais de calma, decida o que fazer a seguir.", dur:8, breathing:false },
+    ]
+  },
+  urge: {
+    nome: "Urge Surfing",
+    doneMsg: "A onda subiu e desceu. A vontade tende a perder força quando você só observa, sem lutar contra ela.",
+    steps: [
+      { label:"Passo 1 de 4", word:"Sente-se", text:"Sente-se confortavelmente e feche os olhos, se puder. Perceba a vontade que está sentindo agora.", dur:20, breathing:false },
+      { label:"Passo 2 de 4", word:"A onda sobe", text:"Imagine essa vontade como uma onda do mar. Ela está crescendo agora — não precisa fazer nada, só observe crescer.", dur:60, breathing:true },
+      { label:"Passo 3 de 4", word:"O pico", text:"A onda chegou no ponto mais alto. Continue respirando com calma. Mesmo no pico, ela não vai te levar — você só está observando.", dur:60, breathing:true },
+      { label:"Passo 4 de 4", word:"A onda desce", text:"Sinta a onda perdendo força e descendo, devagar, sozinha. Ela sempre passa.", dur:60, breathing:true },
+    ]
+  },
+  dez: {
+    nome: "Regra dos 10 minutos",
+    doneMsg: "Você adiou a decisão. Se a vontade ainda estiver forte, tudo bem — mas agora é uma escolha, não um impulso.",
+    steps: [
+      { label:"Passo 1 de 3", word:"Respire", text:"Antes de decidir, respire fundo por alguns instantes. Você não está proibindo nada, só adiando a decisão.", dur:20, breathing:true },
+      { label:"Passo 2 de 3", word:"Aguarde", text:"Diga para si mesma: 'decido em 10 minutos'. Faça outra coisa nesse meio tempo — beba água, dê uma volta, arrume algo perto de você.", dur:600, breathing:false, isCountdown:true },
+      { label:"Passo 3 de 3", word:"Decida", text:"Os 10 minutos passaram. Como está a vontade agora? Decida com calma o que fazer.", dur:10, breathing:false },
+    ]
+  },
+  rain: {
+    nome: "RAIN",
+    doneMsg: "Reconhecer, aceitar, investigar e nutrir — cada uma dessas etapas cria um pouco mais de espaço entre o impulso e a ação.",
+    steps: [
+      { label:"R · Reconhecer", word:"Reconhecer", text:"Perceba o que está acontecendo agora: 'estou com vontade de gastar' ou 'estou com vontade de comer por impulso'.", dur:30, breathing:false },
+      { label:"A · Aceitar", word:"Aceitar", text:"Aceite que essa sensação existe, sem se culpar por senti-la. Sentir não é o mesmo que agir.", dur:30, breathing:true },
+      { label:"I · Investigar", word:"Investigar", text:"Onde no corpo você sente isso? Que emoção pode estar por trás — ansiedade, tédio, cansaço, tristeza?", dur:40, breathing:false },
+      { label:"N · Nutrir", word:"Nutrir", text:"Ofereça a si mesma uma frase gentil: 'tudo bem sentir isso, eu não preciso agir agora'.", dur:30, breathing:true },
+    ]
+  }
+};
+
+let currentTec = null, currentStepIdx = 0, timerInterval = null, timeLeft = 0;
+
+const session = document.getElementById('session');
+const normalView = document.getElementById('normal-view');
+const doneScreen = document.getElementById('done-screen');
+const sessionTitle = document.getElementById('session-title');
+const stepLabel = document.getElementById('step-label');
+const stepText = document.getElementById('step-text');
+const breathWord = document.getElementById('breath-word');
+const breathTimer = document.getElementById('breath-timer');
+const breathRing = document.getElementById('breath-ring');
+const progressDots = document.getElementById('progress-dots');
+const mainBtn = document.getElementById('main-btn');
+const skipBtn = document.getElementById('skip-btn');
+const doneText = document.getElementById('done-text');
+const counterBadge = document.getElementById('counter-badge');
+
+function getCount(){
+  try{ return parseInt(localStorage.getItem('pausas_count')||'0',10); }catch(e){ return 0; }
+}
+function bumpCount(){
+  try{
+    const n = getCount()+1;
+    localStorage.setItem('pausas_count', n);
+    counterBadge.textContent = `Você já fez ${n} pausa${n===1?'':'s'}`;
+    scheduleSync();
+  }catch(e){}
+}
+counterBadge.textContent = `Você já fez ${getCount()} pausa${getCount()===1?'':'s'}`;
+
+document.querySelectorAll('.card').forEach(card=>{
+  card.addEventListener('click', ()=> openSession(card.dataset.tec));
+});
+document.getElementById('back-btn').addEventListener('click', closeSession);
+skipBtn.addEventListener('click', ()=> advanceStep(true));
+mainBtn.addEventListener('click', ()=>{
+  if(mainBtn.dataset.state === 'done'){ closeSession(); return; }
+  if(mainBtn.dataset.state === 'start'){ startSteps(); return; }
+});
+
+function openSession(tec){
+  currentTec = TECS[tec];
+  currentStepIdx = -1;
+  sessionTitle.textContent = currentTec.nome;
+  normalView.style.display='block';
+  doneScreen.classList.remove('show');
+  buildDots();
+  breathWord.textContent = "Pronta?";
+  breathTimer.textContent = "";
+  breathRing.classList.remove('breathing');
+  stepLabel.textContent = "Toque em começar quando estiver pronta";
+  stepText.textContent = currentTec.doneMsgIntro || "Encontre um lugar tranquilo, se possível.";
+  mainBtn.textContent = "Começar";
+  mainBtn.dataset.state = 'start';
+  skipBtn.style.display='block';
+  session.classList.add('active');
+}
+
+function closeSession(){
+  clearInterval(timerInterval);
+  session.classList.remove('active');
+}
+
+function buildDots(){
+  progressDots.innerHTML = '';
+  currentTec.steps.forEach((_, i)=>{
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.id = 'dot-'+i;
+    progressDots.appendChild(d);
+  });
+}
+
+function startSteps(){
+  currentStepIdx = 0;
+  runStep();
+}
+
+function runStep(){
+  clearInterval(timerInterval);
+  const step = currentTec.steps[currentStepIdx];
+  stepLabel.textContent = step.label;
+  stepText.textContent = step.text;
+  breathWord.textContent = step.word;
+  breathRing.classList.toggle('breathing', !!step.breathing);
+  mainBtn.textContent = "Continuar";
+  mainBtn.dataset.state = 'waiting';
+
+  for(let i=0;i<currentTec.steps.length;i++){
+    const dot = document.getElementById('dot-'+i);
+    if(dot) dot.classList.toggle('done', i < currentStepIdx);
+  }
+
+  timeLeft = step.dur;
+  updateTimerLabel(step.isCountdown);
+  timerInterval = setInterval(()=>{
+    timeLeft--;
+    updateTimerLabel(step.isCountdown);
+    if(timeLeft <= 0){
+      clearInterval(timerInterval);
+      advanceStep(false);
+    }
+  }, 1000);
+}
+
+function updateTimerLabel(isCountdown){
+  if(isCountdown){
+    const m = Math.floor(timeLeft/60), s = timeLeft%60;
+    breathTimer.textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  } else {
+    breathTimer.textContent = timeLeft > 0 ? `${timeLeft}s` : '';
+  }
+}
+
+function advanceStep(manual){
+  clearInterval(timerInterval);
+  currentStepIdx++;
+  if(currentStepIdx >= currentTec.steps.length){
+    finishSession();
+  } else {
+    runStep();
+  }
+}
+
+function finishSession(){
+  document.getElementById('dot-'+(currentTec.steps.length-1)).classList.add('done');
+  normalView.style.display='none';
+  doneScreen.classList.add('show');
+  doneText.textContent = currentTec.doneMsg;
+  mainBtn.textContent = "Concluir";
+  mainBtn.dataset.state = 'done';
+  skipBtn.style.display='none';
+  bumpCount();
+  setItemChecked('pausa', true);
+}
+
+/* =========================================================
+   ABAS
+========================================================= */
+const tabBtnMed = document.getElementById('tab-btn-med');
+const tabBtnRotina = document.getElementById('tab-btn-rotina');
+const viewMed = document.getElementById('view-med');
+const viewRotina = document.getElementById('view-rotina');
+
+tabBtnMed.addEventListener('click', ()=>{
+  tabBtnMed.classList.add('active'); tabBtnRotina.classList.remove('active');
+  viewMed.style.display='block'; viewRotina.style.display='none';
+});
+tabBtnRotina.addEventListener('click', ()=>{
+  tabBtnRotina.classList.add('active'); tabBtnMed.classList.remove('active');
+  viewMed.style.display='none'; viewRotina.style.display='block';
+  renderRotina();
+});
+
+/* =========================================================
+   ROTINA — dados e templates por dia da semana
+========================================================= */
+const DIAS_SEMANA = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+const DIAS_ABREV = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+
+function itemsForDate(date){
+  const dow = date.getDay();
+  let items = [
+    {id:'acordar', label:'Acordei no horário', icon:'🌅'},
+    {id:'oracao', label:'Oração', icon:'🙏'},
+    {id:'reflexao', label:'Reflexão com livro/mensagem', icon:'📖'},
+    {id:'cafe', label:'Café da manhã', icon:'☕'},
+    {id:'agua', label:'Bebi água ao longo do dia', icon:'💧'},
+  ];
+  if(dow>=1 && dow<=5){
+    items.push({id:'leitura_trajeto', label:'Li no trajeto', icon:'📚'});
+  }
+  if(dow===1||dow===2||dow===4||dow===5){
+    items.push({id:'mba_leitura', label:'MBA ou leitura à noite', icon:'🎓'});
+    items.push({id:'pausa', label:'Pausa consciente', icon:'🧘'});
+    items.push({id:'hobby', label:'Hobby (pintura/joguinho)', icon:'🎨'});
+  }
+  if(dow===2||dow===4){
+    items.push({id:'academia', label:'Academia', icon:'🏋️'});
+  }
+  if(dow===3){
+    items.push({id:'terreiro', label:'Terreiro', icon:'🔮'});
+  }
+  if(dow===0||dow===6){
+    items.push({id:'leitura_longa', label:'Leitura mais longa', icon:'📚'});
+    items.push({id:'academia_fds', label:'Academia', icon:'🏋️'});
+    items.push({id:'hobby_fds', label:'Hobby sem pressa', icon:'🎨'});
+    items.push({id:'financas', label:'Organização financeira da semana', icon:'💰'});
+  }
+  items.push({id:'diario', label:'Escrevi no diário', icon:'✍️'});
+  items.push({id:'dormir', label:'Dormi no horário planejado', icon:'😴'});
+  return items;
+}
+
+function pad2(n){ return n.toString().padStart(2,'0'); }
+function dateKey(d){ return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`; }
+function getMonday(d){
+  const date = new Date(d);
+  const day = date.getDay();
+  const diff = (day===0 ? -6 : 1-day);
+  date.setDate(date.getDate()+diff);
+  date.setHours(0,0,0,0);
+  return date;
+}
+
+function loadRotinaData(){
+  try{
+    const raw = localStorage.getItem('rotina_checks_v1');
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){ return {}; }
+}
+function saveRotinaData(data){
+  try{ localStorage.setItem('rotina_checks_v1', JSON.stringify(data)); }catch(e){}
+}
+
+function setItemChecked(itemId, value){
+  const today = new Date();
+  const k = dateKey(today);
+  const items = itemsForDate(today);
+  if(!items.find(it=>it.id===itemId)) return;
+  const data = loadRotinaData();
+  if(!data[k]) data[k] = {};
+  data[k][itemId] = value;
+  saveRotinaData(data);
+  if(viewRotina.style.display !== 'none') renderRotina();
+  scheduleSync();
+}
+
+function toggleItem(itemId){
+  const today = new Date();
+  const k = dateKey(today);
+  const data = loadRotinaData();
+  if(!data[k]) data[k] = {};
+  data[k][itemId] = !data[k][itemId];
+  saveRotinaData(data);
+  renderRotina();
+  scheduleSync();
+}
+
+function renderRotina(){
+  const today = new Date();
+  const k = dateKey(today);
+  const items = itemsForDate(today);
+  const data = loadRotinaData();
+  const record = data[k] || {};
+
+  document.getElementById('rotina-date').textContent = `${DIAS_SEMANA[today.getDay()]}, ${pad2(today.getDate())}/${pad2(today.getMonth()+1)}`;
+
+  const checklist = document.getElementById('checklist');
+  checklist.innerHTML = '';
+  let done = 0;
+  items.forEach(it=>{
+    const isDone = !!record[it.id];
+    if(isDone) done++;
+    const div = document.createElement('div');
+    div.className = 'check-item' + (isDone ? ' done' : '');
+    div.innerHTML = `<div class="ic">${it.icon}</div><div class="lbl">${it.label}</div><div class="chk">${isDone ? '✓' : ''}</div>`;
+    div.addEventListener('click', ()=> toggleItem(it.id));
+    checklist.appendChild(div);
+  });
+
+  const pct = items.length ? Math.round((done/items.length)*100) : 0;
+  document.getElementById('rotina-progress-fill').style.width = pct+'%';
+  document.getElementById('rotina-progress-label').textContent = `${done}/${items.length}`;
+
+  buildWeekSummary();
+
+  // domingo: mostra o resumo automaticamente
+  const summaryCard = document.getElementById('summary-card');
+  if(today.getDay()===0){
+    summaryCard.style.display = 'block';
+  }
+}
+
+function buildWeekSummary(){
+  const today = new Date(); today.setHours(0,0,0,0);
+  const monday = getMonday(today);
+  const data = loadRotinaData();
+
+  const dayInfos = [];
+  const itemStats = {};
+  let totalDone = 0, totalItems = 0;
+
+  for(let i=0;i<7;i++){
+    const d = new Date(monday);
+    d.setDate(monday.getDate()+i);
+    if(d > today) { dayInfos.push(null); continue; }
+    const items = itemsForDate(d);
+    const k = dateKey(d);
+    const record = data[k] || {};
+    let done = 0;
+    items.forEach(it=>{
+      const key = it.id;
+      if(!itemStats[key]) itemStats[key] = {label: it.icon+' '+it.label, checked:0, total:0};
+      itemStats[key].total++;
+      if(record[it.id]){ itemStats[key].checked++; done++; }
+    });
+    totalDone += done; totalItems += items.length;
+    dayInfos.push({date:d, done, total: items.length, isToday: dateKey(d)===dateKey(today)});
+  }
+
+  const overallPct = totalItems ? Math.round((totalDone/totalItems)*100) : 0;
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate()+6);
+  const rangeStr = `${pad2(monday.getDate())}/${pad2(monday.getMonth()+1)} a ${pad2(sunday.getDate())}/${pad2(sunday.getMonth()+1)}`;
+
+  let daysHtml = '<div class="days-row">';
+  dayInfos.forEach((info, i)=>{
+    if(!info){
+      daysHtml += `<div class="day-col"><div class="day-bar-wrap"></div><div class="day-label">${DIAS_ABREV[i]}</div></div>`;
+    } else {
+      const p = info.total ? Math.round((info.done/info.total)*100) : 0;
+      daysHtml += `<div class="day-col">
+        <div class="day-bar-wrap"><div class="day-bar-fill" style="height:${p}%"></div></div>
+        <div class="day-label ${info.isToday?'today':''}">${DIAS_ABREV[i]}</div>
+        <div class="day-pct">${info.done}/${info.total}</div>
+      </div>`;
+    }
+  });
+  daysHtml += '</div>';
+
+  const statsArr = Object.values(itemStats).map(s=> ({...s, pct: s.total ? s.checked/s.total : 0}));
+  statsArr.sort((a,b)=> a.pct - b.pct);
+  const focus = statsArr.filter(s=> s.pct < 1).slice(0,3);
+
+  let focusHtml = '';
+  if(focus.length===0){
+    focusHtml = '<div class="focus-empty">Semana completa até agora — nenhum ponto de atenção! 🌷</div>';
+  } else {
+    focusHtml = focus.map(f=> `<div class="focus-item"><span>${f.label}</span><span class="focus-pct">${Math.round(f.pct*100)}%</span></div>`).join('');
+  }
+
+  document.getElementById('summary-card').innerHTML = `
+    <div class="summary-title">Resumo da semana</div>
+    <div class="summary-range">${rangeStr}</div>
+    <div class="summary-big-row"><div class="summary-big">${overallPct}%</div><div class="summary-big-label">cumprido até agora</div></div>
+    ${daysHtml}
+    <div class="focus-title">Onde focar essa semana</div>
+    ${focusHtml}
+  `;
+}
+
+document.getElementById('toggle-summary-btn').addEventListener('click', ()=>{
+  const card = document.getElementById('summary-card');
+  card.style.display = (card.style.display === 'none') ? 'block' : 'none';
+});
+
+/* =========================================================
+   SINCRONIZAÇÃO COM GITHUB (token pessoal)
+========================================================= */
+const GH_CONFIG_KEY = 'gh_sync_config_v1';
+const SYNC_PATH = 'dados-pausa.json';
+
+const syncForm = document.getElementById('sync-form');
+const syncCollapsed = document.getElementById('sync-collapsed');
+const syncStatusText = document.getElementById('sync-status-text');
+
+function loadGhConfig(){
+  try{ return JSON.parse(localStorage.getItem(GH_CONFIG_KEY) || 'null'); }catch(e){ return null; }
+}
+function saveGhConfig(cfg){
+  try{ localStorage.setItem(GH_CONFIG_KEY, JSON.stringify(cfg)); }catch(e){}
+}
+function clearGhConfig(){
+  try{ localStorage.removeItem(GH_CONFIG_KEY); }catch(e){}
+}
+
+function showSyncForm(){
+  syncForm.style.display = 'block';
+  syncCollapsed.style.display = 'none';
+  const cfg = loadGhConfig();
+  if(cfg){
+    document.getElementById('gh-owner').value = cfg.owner || '';
+    document.getElementById('gh-repo').value = cfg.repo || '';
+  }
+}
+function showSyncCollapsed(){
+  syncForm.style.display = 'none';
+  syncCollapsed.style.display = 'flex';
+}
+function setSyncStatus(text, kind){
+  syncStatusText.textContent = text;
+  syncStatusText.className = 'txt' + (kind ? ' '+kind : '');
+}
+
+function ghHeaders(token){
+  return { 'Authorization': 'token '+token, 'Accept': 'application/vnd.github+json' };
+}
+
+async function ghFetchFile(cfg){
+  const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${SYNC_PATH}`;
+  const res = await fetch(url, { headers: ghHeaders(cfg.token) });
+  if(res.status === 404) return { exists:false, sha:null, data:null };
+  if(!res.ok) throw new Error('fetch_failed_'+res.status);
+  const json = await res.json();
+  const content = decodeURIComponent(escape(atob(json.content.replace(/\n/g,''))));
+  return { exists:true, sha: json.sha, data: JSON.parse(content) };
+}
+
+async function ghPutFile(cfg, dataObj, sha){
+  const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${SYNC_PATH}`;
+  const body = {
+    message: 'Atualiza dados - ' + new Date().toISOString(),
+    content: btoa(unescape(encodeURIComponent(JSON.stringify(dataObj, null, 2)))),
+  };
+  if(sha) body.sha = sha;
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: { ...ghHeaders(cfg.token), 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if(!res.ok) throw new Error('put_failed_'+res.status);
+  return await res.json();
+}
+
+function getLocalBundle(){
+  let updatedAt = null;
+  try{ updatedAt = localStorage.getItem('bundle_updated_at'); }catch(e){}
+  return {
+    rotina: loadRotinaData(),
+    pausas_count: getCount(),
+    updated_at: updatedAt,
+  };
+}
+function setLocalBundle(bundle){
+  saveRotinaData(bundle.rotina || {});
+  try{ localStorage.setItem('pausas_count', bundle.pausas_count || 0); }catch(e){}
+  try{ localStorage.setItem('bundle_updated_at', bundle.updated_at || new Date().toISOString()); }catch(e){}
+}
+
+let syncTimeout = null;
+function scheduleSync(){
+  const cfg = loadGhConfig();
+  if(!cfg) return;
+  clearTimeout(syncTimeout);
+  syncTimeout = setTimeout(()=> pushToGithub(cfg), 1200);
+}
+
+async function pushToGithub(cfg){
+  setSyncStatus('🔄 Sincronizando...', '');
+  try{
+    let sha = null;
+    try{
+      const remote = await ghFetchFile(cfg);
+      sha = remote.exists ? remote.sha : null;
+    }catch(e){ /* segue tentando enviar mesmo assim */ }
+    const bundle = getLocalBundle();
+    bundle.updated_at = new Date().toISOString();
+    try{ localStorage.setItem('bundle_updated_at', bundle.updated_at); }catch(e){}
+    await ghPutFile(cfg, bundle, sha);
+    setSyncStatus('✅ Sincronizado com GitHub', 'ok');
+  }catch(e){
+    setSyncStatus('⚠️ Não sincronizou agora (confira internet/token)', 'err');
+  }
+}
+
+async function pullFromGithub(cfg){
+  setSyncStatus('🔄 Buscando dados...', '');
+  try{
+    const remote = await ghFetchFile(cfg);
+    if(remote.exists){
+      const local = getLocalBundle();
+      const remoteTime = remote.data.updated_at ? new Date(remote.data.updated_at).getTime() : 0;
+      const localTime = local.updated_at ? new Date(local.updated_at).getTime() : 0;
+      if(remoteTime >= localTime){
+        setLocalBundle(remote.data);
+      } else {
+        await pushToGithub(cfg);
+      }
+    } else {
+      await pushToGithub(cfg);
+    }
+    setSyncStatus('✅ Sincronizado com GitHub', 'ok');
+    counterBadge.textContent = `Você já fez ${getCount()} pausa${getCount()===1?'':'s'}`;
+    if(viewRotina.style.display !== 'none') renderRotina();
+  }catch(e){
+    setSyncStatus('⚠️ Erro ao conectar — confira usuário, repositório e token', 'err');
+  }
+}
+
+document.getElementById('gh-connect-btn').addEventListener('click', ()=>{
+  const owner = document.getElementById('gh-owner').value.trim();
+  const repo = document.getElementById('gh-repo').value.trim();
+  const token = document.getElementById('gh-token').value.trim();
+  if(!owner || !repo || !token){
+    setSyncStatus('Preencha usuário, repositório e token', 'err');
+    showSyncForm();
+    return;
+  }
+  const cfg = { owner, repo, token };
+  saveGhConfig(cfg);
+  showSyncCollapsed();
+  pullFromGithub(cfg);
+});
+
+document.getElementById('sync-config-btn').addEventListener('click', ()=>{
+  if(confirm('Deseja desconectar a sincronização com o GitHub neste aparelho? (seus dados salvos aqui não serão apagados)')){
+    clearGhConfig();
+    showSyncForm();
+    document.getElementById('gh-token').value = '';
+  } else {
+    showSyncForm();
+  }
+});
+
+document.getElementById('sync-refresh-btn').addEventListener('click', ()=>{
+  const cfg = loadGhConfig();
+  if(!cfg){
+    alert('Configure a sincronização com o GitHub primeiro (no topo do app).');
+    return;
+  }
+  pullFromGithub(cfg);
+});
+
+(function initSync(){
+  const cfg = loadGhConfig();
+  if(cfg){
+    showSyncCollapsed();
+    pullFromGithub(cfg);
+  } else {
+    showSyncForm();
+  }
+})();
+
+renderRotina();
+</script>
+</body>
+</html>
