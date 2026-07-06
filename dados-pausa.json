@@ -1,9 +1,10 @@
 {
   "rotina": {
     "2026-07-06": {
-      "acordar": true
+      "acordar": true,
+      "oracao": true
     }
   },
   "pausas_count": 0,
-  "updated_at": "2026-07-06T10:18:24.460Z"
+  "updated_at": "2026-07-06T10:18:27.144Z"
 }
