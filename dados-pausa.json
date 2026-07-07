@@ -5,9 +5,10 @@
       "oracao": true,
       "reflexao": true,
       "cafe": true,
-      "mba_leitura": true
+      "mba_leitura": true,
+      "agua": true
     }
   },
   "pausas_count": 0,
-  "updated_at": "2026-07-07T00:02:25.835Z"
+  "updated_at": "2026-07-07T00:02:37.997Z"
 }
