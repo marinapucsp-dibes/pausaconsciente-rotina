@@ -13,9 +13,10 @@
       "acordar": true,
       "oracao": true,
       "reflexao": true,
-      "cafe": true
+      "cafe": true,
+      "leitura_trajeto": true
     }
   },
   "pausas_count": 0,
-  "updated_at": "2026-07-07T15:14:40.627Z"
+  "updated_at": "2026-07-07T15:14:42.737Z"
 }
