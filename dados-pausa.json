@@ -15,8 +15,14 @@
       "reflexao": true,
       "cafe": true,
       "leitura_trajeto": true
+    },
+    "2026-07-08": {
+      "acordar": true,
+      "oracao": true,
+      "reflexao": true,
+      "cafe": true
     }
   },
   "pausas_count": 0,
-  "updated_at": "2026-07-07T15:14:42.737Z"
+  "updated_at": "2026-07-08T09:41:51.944Z"
 }
