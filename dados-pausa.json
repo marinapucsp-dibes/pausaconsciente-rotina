@@ -39,9 +39,11 @@
       "oracao": true,
       "reflexao": true,
       "cafe": true,
-      "agua": true
+      "agua": true,
+      "hobby": true,
+      "diario": true
     }
   },
   "pausas_count": 0,
-  "updated_at": "2026-07-11T02:51:48.383Z"
+  "updated_at": "2026-07-11T02:51:53.004Z"
 }
