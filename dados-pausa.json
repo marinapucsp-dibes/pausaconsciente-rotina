@@ -47,9 +47,10 @@
       "acordar": true,
       "oracao": true,
       "reflexao": true,
-      "cafe": true
+      "cafe": true,
+      "agua": true
     }
   },
   "pausas_count": 0,
-  "updated_at": "2026-07-11T14:57:28.988Z"
+  "updated_at": "2026-07-12T02:24:03.518Z"
 }
